@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
 </head>
-<body class="d-block">
+<body>
     {% block navbar %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
         <a class="navbar-brand" href="{% url 'library_admin:admin-dashboard' %}">Home Page</a>
@@ -18,11 +18,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
               <a class="nav-link" href="{% url 'library_admin:add-book' %}">Add Book</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Add Author</a>
+              <a class="nav-link" href="{% url 'author:add-author' %}">Add Author</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
@@ -36,7 +36,7 @@
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'library_admin:admin-logout' %}">Log out</a>
+              <a class="nav-link" href="3">Log out</a>
             </li>
           </ul>
         </div>
@@ -44,26 +44,37 @@
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchinput">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id="searchbtn">Search</button>
         </form>
-    </nav>
+      </nav>
     {% endblock navbar %}
     
     {% block content %}
-      <h1 class="text-center mt-4">{{author.name}}</h1><hr>
-      <h2 class="mx-5">Discription :</h2><br>
-      <p class="mx-5">{{author.description}}</p><hr>
-      <h2 class="mx-5">Books :</h2><br>
-      <p class="mx-5">
-        {% for i in author.book.all %} 
-          - {{i.name}}<br>
-        {% endfor %} 
-      </p><hr>
-      <h2 class="mx-5">Books Discription :</h2><br>
-      <p class="mx-5">
-        {% for i in author.book.all %} 
-          - <b>{{i.name}}</b> : {{i.description}}<br><br>
-        {% endfor %} 
-      </p><hr>
-      <p class="text-center"><a href="{% url 'author:author-list' %}" class="btn btn-lg btn-success">Home Page</a></p>
+    <h1 class="text-center my-5">Issue a Book</h1>
+    
+    <form action="" method="POST" class="form-control text-center mb-5" novalidate onsubmit="return issue_book()">
+        {% csrf_token %}
+        <label for="">User Name :</label><br>
+        {{form.username}}
+        <span id="error_username" class="text-danger"></span><br>
+        <label for="">User Email :</label><br>
+        {{form.email}}
+        <span id="error_email" class="text-danger"></span><br>
+        <label for="">User Address :</label><br>
+        {{form.address}}
+        <span id="error_address" class="text-danger"></span><br>
+        <label for="">Book :</label><br>
+        {{form.book}}
+        <span id="error_book" class="text-danger"></span><br>
+        <label for="">Issued Date :</label><br>
+        {{form.issued_date}}
+        <span id="error_issued_date" class="text-danger"></span><br>
+        <label for="">Return Date :</label><br>
+        {{form.return_date}}
+        <span id="error_return_date" class="text-danger"></span><br>
+        <label for="">Charge Per Day :</label><br>
+        {{form.charge_per_day}}
+        <span id="error_charge_per_day" class="text-danger"></span><br><br>
+        <input type="submit" value="Submit" class="btn btn-success">
+    </form>
     {% endblock content %}
 
 </body>

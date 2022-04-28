@@ -13,7 +13,7 @@
 <body class="d-block">
   {% block navbar %}
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
-    <a class="navbar-brand" href="#">Home Page</a>
+    <a class="navbar-brand" href="{% url 'library_admin:admin-dashboard' %}">Home Page</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -33,7 +33,6 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="{% url 'library_admin:issue-book' %}">Issue Book Form</a></li>
-            <li><a class="dropdown-item" href="{% url 'library_admin:issued-books-list' %}">Issued Books List</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
@@ -60,36 +59,49 @@
   {% endblock navbar %}
 
   {% block content %}
-  <h1 class="text-center mt-4">Available Books</h1>
+  <h1 class="text-center mt-4">Issued Books</h1>
   <hr>
 <div class="m-5">
   <table class="table">
     <thead class="bg-dark text-white">
-      <th scope="col">id</th>
       <th scope="col">Name</th>
-      <th scope="col">Description</th>
-      <th scope="col">Category</th>
-      <th scope="col">Quantity</th>
-      <th scope="col">Authors</th>
+      <th scope="col">Email</th>
+      <th scope="col">Address</th>
+      <th scope="col">Books</th>
+      <th scope="col">Issued Date</th>
+      <th scope="col">Return Date</th>
+      <th scope="col">Charge per Day</th>
+      <th scope="col">Total Charge</th>
       <th scope="col">Actions</th>
     </thead>
     <tbody>
       {% for book in books %}
       <tr>
-        <th scope="row">{{book.id}}</th>
-        <td>{{book.name}}</td>
-        <td>{{book.description | truncatechars:55}}</td>
-        <td>{{book.category}}</td>
-        <td>{{book.quantity}}</td>
+        <th scope="row">{{book.username}}</th>
+        <td>{{book.email}}</td>
+        <td>{{book.address}}</td>
+        <td>{{book.book}}</td>
+        <td>{{book.issued_date}}</td>
+        {% if book.return_date is not None %}
+        <td>{{book.return_date}}</td>
+        {% else %}
+        <td>-</td>
+        {% endif %}
+        <td>₹{{book.charge_per_day}}</td> 
+        {% if book.total_charge is not None %} 
+        <td>₹{{book.total_charge}}</td>
+        {% else %}
+        <td>-</td>  
+        {% endif %}
         <td>
-          {% for author in book.author_set.all %}
-          - {{author}}<br>
-          {% endfor %}
-        </td>
-        <td>
-          <a href="{% url 'library_admin:delete-book' book.id %}" class="btn btn-danger">Delete</a>
-          <a href="{% url 'library_admin:edit-book' book.id %}" class="btn btn-info">Edit</a>
-          <a href="{% url 'library_admin:detail-book' book.id %}" class="btn btn-secondary">View</a>
+        {% if book.return_date is None %}
+            <a href="{% url 'library_admin:issued-books-delete' book.id %}" class="btn btn-danger">Delete</a>
+            <a href="{% url 'library_admin:issued-books-edit' book.id %}" class="btn btn-info">Edit</a>
+            <a href="{% url 'library_admin:issued-books-details' book.id %}" class="btn btn-secondary">View</a>
+        {% else %}
+            <!-- <a href="{% url 'library_admin:issued-books-delete' book.id %}" class="btn btn-danger">Delete</a> -->
+            <li class="list-group-item list-group-item-dark">Book Recived</li>
+        {% endif %}
         </td>
       </tr>
       {% endfor %}
@@ -97,7 +109,7 @@
   </table>
 </div>
 
-  <div class="text-center"><a href="{% url 'author:author-list' %}" class="btn btn-lg btn-success">Author List</a></div>
+  <div class="text-center"><a href="{% url 'library_admin:admin-dashboard' %}" class="btn btn-lg btn-success">Home Page</a></div>
   {% endblock content %}
 
 </body>

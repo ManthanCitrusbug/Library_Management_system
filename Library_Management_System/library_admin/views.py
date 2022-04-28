@@ -5,11 +5,11 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from author.models import Author
-from library_admin.forms import AddBookForm, AdminLoginForm, AdminRegisterform
+from library_admin.forms import AddBookForm, AdminLoginForm, AdminRegisterform, Issue_Book_Form, Issue_Book_Edit_Form
 from django.contrib.auth.models import User
-from django.views.generic import CreateView, TemplateView, ListView, UpdateView, DetailView
+from django.views.generic import CreateView, TemplateView, ListView, UpdateView, DetailView, DeleteView
 from django.contrib.auth import authenticate, login, logout
-from library_admin.models import Book, Category
+from library_admin.models import Book, Category, Issued_Book
 
 from library_admin.models import Book
 
@@ -92,3 +92,38 @@ class DeleteBookView(View):
         book.deleted = True
         book.save()
         return redirect('library_admin:admin-dashboard')
+
+    
+class IssueBookView(CreateView):
+    model = Issued_Book
+    form_class = Issue_Book_Form
+    template_name = 'book/issue_book.html'
+    success_url = 'issued-books-list'
+
+
+class IssuedBooksListView(ListView):
+    model = Issued_Book
+    template_name = 'book/issued_book_list.html'
+    context = {}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['books'] = Issued_Book.objects.all().order_by('id')
+        return context
+
+
+class IssuedBookDetailsView(DetailView):
+    model = Issued_Book
+    template_name = 'book/issued_details.html'
+
+
+class IssuedBookEditView(UpdateView):
+    model = Issued_Book
+    form_class = Issue_Book_Edit_Form
+    template_name = 'book/edit_issued_book.html'
+    success_url = reverse_lazy('library_admin:issued-books-list')
+
+class IssuedBookDeleteView(DeleteView):
+    model = Issued_Book
+    template_name = 'book/delete_book.html'
+    success_url = reverse_lazy('library_admin:issued-books-list')

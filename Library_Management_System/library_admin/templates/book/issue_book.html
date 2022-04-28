@@ -21,6 +21,18 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'library_admin:add-book' %}">Add Book</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'author:add-author' %}">Add Author</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Issue Book
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{% url 'library_admin:issued-books-list' %}">Issued Books List</a></li>
+              </ul>
+            </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
@@ -33,7 +45,7 @@
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'library_admin:admin-logout' %}">Log out</a>
+              <a class="nav-link" href="3">Log out</a>
             </li>
           </ul>
         </div>
@@ -45,23 +57,27 @@
     {% endblock navbar %}
     
     {% block content %}
-    <h1 class="text-center my-5">Add a Author</h1>
-    <form action="" method="POST" class="form-control text-center mb-5" novalidate onsubmit="return author_validate()">
+    <h1 class="text-center my-5">Issue a Book</h1>
+    <form action="" method="POST" class="form-control text-center mb-5" novalidate onsubmit="return issue_book()">
         {% csrf_token %}
-        <label for="">Author Name :</label><br>
-        {{form.name}}
-        <span id="error_product_name" class="text-danger"></span><br>
-        <label for="">Author Discription :</label><br>
-        {{form.description}}
-        <span id="error_product_disc" class="text-danger"></span><br>
-        <label for="">Author's Book :</label><br>
+        <label for="">User Name :</label><br>
+        {{form.username}}
+        <span id="error_username" class="text-danger"></span><br>
+        <label for="">User Email :</label><br>
+        {{form.email}}
+        <span id="error_email" class="text-danger"></span><br>
+        <label for="">User Address :</label><br>
+        {{form.address}}
+        <span id="error_address" class="text-danger"></span><br>
+        <label for="">Book :</label><br>
         {{form.book}}
-        <!-- <select name="" id="id_book" multiple="multiple" class="form-control w-50 m-auto">
-            {% for book in books %}
-            <option value="{{book.name}}">{{book.name}}</option>
-            {% endfor %}
-        </select> -->
-        <span id="error_quantity" class="text-danger"></span><br><br>
+        <span id="error_book" class="text-danger"></span><br>
+        <label for="">Issued Date :</label><br>
+        {{form.issued_date}}
+        <span id="error_issued_date" class="text-danger"></span><br>
+        <label for="">Charge Per Day :</label><br>
+        {{form.charge_per_day}}
+        <span id="error_charge_per_day" class="text-danger"></span><br><br>
         <input type="submit" value="Submit" class="btn btn-success">
     </form>
     {% endblock content %}

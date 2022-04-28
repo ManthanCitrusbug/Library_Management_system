@@ -11,7 +11,7 @@
 <body class="d-block">
     {% block navbar %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
-        <a class="navbar-brand" href="#">Home Page</a>
+        <a class="navbar-brand" href="{% url 'library_admin:admin-dashboard' %}">Home Page</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -22,7 +22,7 @@
               <a class="nav-link" href="{% url 'library_admin:add-book' %}">Add Book</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'library_admin:add-author' %}">Add Author</a>
+              <a class="nav-link" href="#">Add Author</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
@@ -44,37 +44,27 @@
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchinput">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id="searchbtn">Search</button>
         </form>
-      </nav>
+    </nav>
     {% endblock navbar %}
     
     {% block content %}
-      <h1 class="text-center mt-4">Authors List</h1><hr>
-      <table class="table">
-        <thead class="bg-dark text-white">
-            <th scope="col">id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Description</th>
-            <th scope="col">Book</th>
-            <th scope="col">Actions</th>
-        </thead>
-        <tbody>
-            {% for author in authors %}
-            <tr>
-                <th scope="row">{{author.id}}</th>
-                <td>{{author.name}}</td>
-                <td>{{author.description | truncatechars:55}}</td>
-                <td>{{author.book}}</td>
-                <td>
-                    <a href="{% url 'library_admin:delete-book' author.id %}" class="btn btn-danger">Delete</a>
-                    <a href="{% url 'library_admin:edit-book' author.id %}" class="btn btn-info">Edit</a>
-                    <a href="{% url 'library_admin:detail-book' author.id %}" class="btn btn-secondary">View</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+      <h1 class="text-center mt-4">User : {{issued_book.username}}</h1><hr>
+      <h2 class="mx-5">Books : </h2><br>
+      <p class="mx-5">- {{issued_book.book}}<br></p><hr>      
+      <h2 class="mx-5">Email : </h2><br>
+      <p class="mx-5">{{issued_book.email}}</p><hr>
+      <h2 class="mx-5">Address : </h2><br>
+      <p class="mx-5">{{issued_book.address}}</p><hr>
+      <h2 class="mx-5">Issued Date : </h2><br>
+      <p class="mx-5">{{issued_book.issued_date}}</p><hr>
+      <h2 class="mx-5">Return Date : </h2><br>
+      <p class="mx-5">{{issued_book.return_date}}</p><hr><br>
+      <h2 class="mx-5">Charge per Day : </h2><br>
+      <p class="mx-5">₹{{issued_book.charge_per_day}}</p><hr><br>
+      <h2 class="mx-5">Total Charge : </h2><br>
+      <p class="mx-5">₹{{issued_book.total_charge}}</p><hr><br>
 
-    <div class="float-right"><a href="{% url 'library_admin:admin-dashboard' %}" class="btn btn-lg btn-success">Available Books</a></div>
+      <p class="text-center"><a href="{% url 'library_admin:issued-books-list' %}" class="btn btn-lg btn-success">Home Page</a></p>
     {% endblock content %}
 
 </body>

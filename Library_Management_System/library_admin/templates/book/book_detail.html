@@ -50,27 +50,23 @@
     {% block content %}
       <h1 class="text-center mt-4">{{book.name}}</h1><hr>
       <h2 class="mx-5">Book Discription : </h2><br>
-      <p class="mx-5">{{book.description}}</p><hr>
+      <p class="mx-5">{{book.description}}</p><hr>      
+      <h2 class="mx-5">Book Author : </h2><br>
+      <p class="mx-5">
+        {% for author in book.author_set.all %}
+          - {{author.name}}<br>
+        {% endfor %}
+      </p><hr>
+      <h2 class="mx-5">Author Discription : </h2><br>
+      <p class="mx-5">
+        {% for author in book.author_set.all %}
+          - <b>{{author.name}}</b> : {{author.description}}<br><br>
+        {% endfor %}
+      </p><hr>
       <h2 class="mx-5">Book Category : </h2><br>
       <p class="mx-5">{{book.category}}</p><hr>
       <h2 class="mx-5">Book Quantity : </h2><br>
       <p class="mx-5">{{book.quantity}}</p><hr><br>
-      <h1 class="text-center mt-4">{{book.name}}'s Authors</h1><hr>
-      
-      {% for author in book.author_set.all %}
-      <h2 class="mx-5">{{author.name}}</h2><hr><br>
-      <!-- <p class="mx-5">- {{author.name}}<br></p><hr> -->
-      <h2 class="mx-5">{{author.name}} Discription :</h2><br>
-      <p class="mx-5">- {{author.description}}<br></p><hr>      
-      <h2 class="mx-5">{{author.name}} Books :</h2><br>
-
-      <p class="mx-5">
-        {% for i in author.book.all %}
-        - {{i.name}}<br>
-        {% endfor %}
-      </p><hr>
-
-      {% endfor %}
 
       <p class="text-center"><a href="{% url 'library_admin:admin-dashboard' %}" class="btn btn-lg btn-success">Home Page</a></p>
     {% endblock content %}

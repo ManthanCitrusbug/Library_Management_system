@@ -27,6 +27,16 @@
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
+                Issue Book
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{% url 'library_admin:issue-book' %}">Issue Book Form</a></li>
+                <li><a class="dropdown-item" href="{% url 'library_admin:issued-books-list' %}">Issued Books List</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
                 Categoris
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -49,6 +59,7 @@
     
     {% block content %}
       <h1 class="text-center mt-4">Authors List</h1><hr>
+    <div class="m-5">
       <table class="table">
         <thead class="bg-dark text-white">
             <th scope="col">id</th>
@@ -72,9 +83,10 @@
             </tr>
             {% endfor %}
         </tbody>
-    </table>
+      </table>
+    </div>
 
-    <div class="float-right"><a href="{% url 'library_admin:admin-dashboard' %}" class="btn btn-lg btn-success">Available Books</a></div>
+    <div class="text-center"><a href="{% url 'library_admin:admin-dashboard' %}" class="btn btn-lg btn-success">Available Books</a></div>
     {% endblock content %}
 
 </body>

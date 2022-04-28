@@ -167,12 +167,13 @@ function book_validate(){
 
 
     if(name == ""){
-        document.getElementById("error_product_name").innerHTML = "Enter Book name.";
-        name_submition = 0;
+        document.getElementById("error_product_name").innerHTML = "Enter you're User name.";
+        user_submition = 0;
     }
+
     else{
         document.getElementById("error_product_name").innerHTML = "";
-        name_submition = 1;
+        user_submition = 1;
     }
 
 
@@ -211,7 +212,7 @@ function book_validate(){
         qun_submition = 1;
     }
 
-    if((name_submition===1) & (disc_submition===1) & (cate_submition===1) & (qun_submition===1)){
+    if((user_submition===1) & (disc_submition===1) & (cate_submition===1) & (qun_submition===1)){
         return true;
     }
     else{
@@ -224,34 +225,21 @@ function book_validate(){
 function author_validate(){
     const name = document.getElementById("id_name").value;
     const disc = document.getElementById("id_description").value;
-    // const book = document.getElementById("id_book");
-    
-    // const book = document.getElementById("id_book").options.length;
-    // // console.log(book);
-    // for (i = 0; i < book; i++) {
-    //     x = book[i].value;
-    //     console.log(x);
-    //     if (x == null || x == "") {
-    //         document.getElementById("error_quantity").innerHTML = "Select a Book.";
-    //         book_submition = 0;
-    //     }
-    //     else{
-    //         document.getElementById("error_quantity").innerHTML = "";
-    //         book_submition = 1;
-    //     }
-    // }
-
 
     if(name == ""){
-        document.getElementById("error_product_name").innerHTML = "Enter Book name.";
-        name_submition = 0;
+        document.getElementById("error_product_name").innerHTML = "Enter you're User name.";
+        user_submition = 0;
     }
+
+    else if(!isNaN(name) || (!isNaN(name[0]))){
+        document.getElementById("error_product_name").innerHTML = "Enter valid Name."
+        user_submition = 0;
+    }
+
     else{
         document.getElementById("error_product_name").innerHTML = "";
-        name_submition = 1;
+        user_submition = 1;
     }
-
-
     if(disc == ""){
         document.getElementById("error_product_disc").innerHTML = "Enter Book Dicription.";
         disc_submition = 0;
@@ -261,7 +249,7 @@ function author_validate(){
         disc_submition = 1;
     }
 
-    if((name_submition===1) & (disc_submition===1)){
+    if((user_submition===1) & (disc_submition===1)){
         return true;
     }
     else{
@@ -269,3 +257,97 @@ function author_validate(){
     }
 }
 
+
+
+
+function issue_book(){
+    const name = document.getElementById("id_username").value;
+    const email = document.getElementById("id_email").value;
+    var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const address = document.getElementById("id_address").value;
+    const book = document.getElementById("id_book").value;
+    const issued_date = document.getElementById("id_issued_date").value;
+    const charge_per_day = document.getElementById("id_charge_per_day").value;
+
+
+    if(name == ""){
+        document.getElementById("error_username").innerHTML = "Enter User Name.";
+        name_submition = 0;
+    }
+    else{
+        document.getElementById("error_username").innerHTML = "";
+        name_submition = 1;
+    }
+
+    if(email == ""){
+        document.getElementById("error_email").innerHTML = "Enter your Mail ID";
+        email_submition = 0;
+
+    }
+    else if(!isNaN(email)){
+        document.getElementById("error_email").innerHTML = "Alphabests are not allowed";
+        email_submition = 0;
+
+    }
+    else if(validRegex.test(email)==false){
+        document.getElementById("error_email").innerHTML = "Enter valid email.";
+        email_submition = 0;
+    }
+    else{
+        document.getElementById("error_email").innerHTML = "";
+        email_submition = 1;
+    }
+
+
+    if(address == ""){
+        document.getElementById("error_address").innerHTML = "Enter Book Dicription.";
+        disc_submition = 0;
+    }
+    else{
+        document.getElementById("error_address").innerHTML = "";
+        disc_submition = 1;
+    }
+
+    if(book == ""){
+        document.getElementById("error_book").innerHTML = "Select Book Category.";
+        cate_submition = 0;
+    }
+    else{
+        document.getElementById("error_book").innerHTML = "";
+        cate_submition = 1;
+    }
+
+    if(issued_date == ""){
+        document.getElementById("error_issued_date").innerHTML = "Enter Issued Date.";
+        disc_submition = 0;
+    }
+    else{
+        document.getElementById("error_issued_date").innerHTML = "";
+        disc_submition = 1;
+    }
+
+
+    if(charge_per_day == ""){
+        document.getElementById("error_charge_per_day").innerHTML = "Enter Charge Per Day.";
+        chr_submition = 0;
+    }
+    else if(isNaN(charge_per_day)){
+        document.getElementById("error_charge_per_day").innerHTML = "Enter a Number."
+        chr_submition = 0;
+    }
+    else if(charge_per_day<=0){
+        document.getElementById("error_charge_per_day").innerHTML = "Enter a valid Charge."
+        chr_submition = 0;
+    }
+    else{
+        document.getElementById("error_charge_per_day").innerHTML = "";
+        chr_submition = 1;
+    }
+
+    if((name_submition===1) & (disc_submition===1) & (cate_submition===1) & (chr_submition===1)){
+        return true;
+    }
+    else{
+        return false;
+    }
+}

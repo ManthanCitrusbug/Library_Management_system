@@ -22,7 +22,7 @@
               <a class="nav-link" href="{% url 'library_admin:add-book' %}">Add Book</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Add Author</a>
+              <a class="nav-link" href="{% url 'author:add-author' %}">Add Author</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
@@ -37,17 +37,6 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'library_admin:admin-logout' %}">Log out</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Price Range
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <input type="range" class="form-range" id="price_range" min="{{price.min_price}}" max="{{price.max_price}}" name="price_range">
-                Value = <span id="price"></span>
-                <input type="submit" class="btn btn-success" id="price_submit">
-              </ul>
             </li>
           </ul>
         </div>
@@ -64,7 +53,7 @@
     <form action="" method="POST">
         {% csrf_token %}
         <input type="submit" value="Delete" class="btn btn-danger">
-        <a href="{% url 'library_admin:admin-dashboard' %}" class="btn btn-info">Cancel</a>
+        <a href="{% url 'author:author-list' %}" class="btn btn-info">Cancel</a>
     </form>
     </div>
     {% endblock content %}
