@@ -14,5 +14,5 @@ class Author(models.Model):
 
     def save(self, *args, **kwargs):
         self.name = self.name.title()
-        self.description = self.description.title()
+        self.description = self.description.capitalize()
         return super(Author, self).save(*args, **kwargs)

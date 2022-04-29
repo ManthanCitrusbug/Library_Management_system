@@ -60,6 +60,11 @@
         <label for="">Book Quantity :</label><br>
         {{form.quantity}}
         <span id="error_quantity" class="text-danger"></span><br><br>
+        {% if form.author %}
+        <label for="">Book Author :</label><br>
+        {{form.author}}
+        <span id="error_quantity" class="text-danger"></span><br><br>
+        {% endif %}
         <input type="submit" value="Submit" class="btn btn-success">
     </form>
     {% endblock content %}

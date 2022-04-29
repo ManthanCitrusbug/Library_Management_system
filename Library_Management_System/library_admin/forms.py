@@ -1,6 +1,9 @@
+from datetime import date, datetime
 from asyncio.windows_events import NULL
+from xml.dom import ValidationErr
 from django import forms
 from django.contrib.auth.models import User
+from author.models import Author
 from library_admin.models import Book, Issued_Book
 
 class AdminRegisterform(forms.ModelForm):
@@ -52,6 +55,42 @@ class AdminLoginForm(forms.ModelForm):
 
 
 class AddBookForm(forms.ModelForm):
+
+    author = forms.ModelMultipleChoiceField(queryset=Author.objects.all(), widget=forms.SelectMultiple(attrs={'class' : 'form-control w-50 m-auto'}), required=False)
+
+    class Meta:
+        model = Book
+        fields = ['name', 'description', 'quantity', 'category']
+        widgets = {
+            'name' : forms.TextInput(
+                attrs={'class' : 'form-control w-50 m-auto'}
+            ),
+            'description' : forms.Textarea(
+                attrs={'class' : 'form-control w-50 m-auto'}
+            ),
+            'quantity' : forms.TextInput(
+                attrs={'class' : 'form-control w-50 m-auto'}
+            ),
+            'category' : forms.Select(
+                attrs={'class' : 'form-control w-50 m-auto'}
+            ),
+        }
+
+    def save(self, commit=True):
+        user = super(AddBookForm, self).save(commit=False)
+        data = self.cleaned_data
+        if commit:
+            user.save()
+            x = Book.objects.get(name=user.name, deleted=False)
+            author_name = data['author']
+            for i in author_name:
+                author = Author.objects.get(name=i)
+                author.book.add(x)
+        return user
+
+
+class EditBookForm(forms.ModelForm):
+
     class Meta:
         model = Book
         fields = ['name', 'description', 'quantity', 'category']
@@ -98,6 +137,21 @@ class Issue_Book_Form(forms.ModelForm):
             ),
         }
 
+    def clean(self):
+        data = super(Issue_Book_Form, self).clean()
+        book_name = data.get('book')
+        email_data = data.get('email')
+        issued_date = data.get('issued_date')
+        if Issued_Book.objects.filter(email=email_data, book__name=book_name, return_date=None).exists():
+             raise forms.ValidationError("User has already issued this book.")
+        if issued_date < date.today():
+            raise forms.ValidationError("Enter valid date.")
+        if book_name:
+            book_instance = Book.objects.get(name=book_name, deleted=False)
+            if book_instance.quantity == 0:
+                raise forms.ValidationError("Book is not available.")
+        return super().clean()
+
     def save(self, commit=True):
         user = super().save(commit=False)
         qun = Book.objects.get(name=user.book)
@@ -143,10 +197,12 @@ class Issue_Book_Edit_Form(forms.ModelForm):
         cleaned_data = super(Issue_Book_Edit_Form, self).clean()
         date = cleaned_data.get('issued_date')
         re_book = cleaned_data.get("return_date")
+        days = NULL
         if re_book != None:
-            days = re_book.day - date.day
-        # if days < 0:
-        #     raise forms.ValidationError("Enter valid return date.")
+            days = re_book - date
+            print(days)
+            if days.days < 0:
+                raise forms.ValidationError("Enter valid return date.")
         return super().clean()
 
     def save(self, commit=True):

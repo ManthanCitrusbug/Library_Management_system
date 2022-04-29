@@ -49,7 +49,9 @@
     
     {% block content %}
     <h1 class="text-center my-5">Issue a Book</h1>
-    
+    {% for error in form.non_field_errors %}    
+    <p class="text-center"><span id="error_book" class="text-danger">{{ error }}</span><br></p>
+    {% endfor %}
     <form action="" method="POST" class="form-control text-center mb-5" novalidate onsubmit="return issue_book()">
         {% csrf_token %}
         <label for="">User Name :</label><br>
@@ -76,6 +78,5 @@
         <input type="submit" value="Submit" class="btn btn-success">
     </form>
     {% endblock content %}
-
 </body>
 </html>

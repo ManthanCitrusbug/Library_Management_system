@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, TemplateView, ListView, UpdateView, DetailView
 from .forms import AddAuthorForm
-from library_admin.models import Book, Category
+from library_admin.models import Book
 from .models import Author
 # Create your views here.
 
@@ -27,14 +27,11 @@ class AddAuthorView(CreateView):
 
 
 class AuthorListView(ListView):
+    paginate_by = 10
+    context_object_name = 'authors'
     model = Author
     template_name = 'author/author_list.html'
-    context = {}
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['authors'] = Author.objects.filter(deleted=False).order_by('id')
-        return context
+    queryset = Author.objects.filter(deleted=False).order_by('id')
 
 
 class AuthorDetailView(DetailView):

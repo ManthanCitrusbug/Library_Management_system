@@ -62,43 +62,61 @@
   {% block content %}
   <h1 class="text-center mt-4">Available Books</h1>
   <hr>
-<div class="m-5">
-  <table class="table">
-    <thead class="bg-dark text-white">
-      <th scope="col">id</th>
-      <th scope="col">Name</th>
-      <th scope="col">Description</th>
-      <th scope="col">Category</th>
-      <th scope="col">Quantity</th>
-      <th scope="col">Authors</th>
-      <th scope="col">Actions</th>
-    </thead>
-    <tbody>
-      {% for book in books %}
-      <tr>
-        <th scope="row">{{book.id}}</th>
-        <td>{{book.name}}</td>
-        <td>{{book.description | truncatechars:55}}</td>
-        <td>{{book.category}}</td>
-        <td>{{book.quantity}}</td>
-        <td>
-          {% for author in book.author_set.all %}
-          - {{author}}<br>
-          {% endfor %}
-        </td>
-        <td>
-          <a href="{% url 'library_admin:delete-book' book.id %}" class="btn btn-danger">Delete</a>
-          <a href="{% url 'library_admin:edit-book' book.id %}" class="btn btn-info">Edit</a>
-          <a href="{% url 'library_admin:detail-book' book.id %}" class="btn btn-secondary">View</a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-
-  <div class="text-center"><a href="{% url 'author:author-list' %}" class="btn btn-lg btn-success">Author List</a></div>
+  <div class="m-5">
+    <table class="table">
+      <thead class="bg-dark text-white">
+        <th scope="col">id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Category</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Authors</th>
+        <th scope="col">Actions</th>
+      </thead>
+      <tbody>
+        {% for book in books %}
+        <tr>
+          <th scope="row">{{book.id}}</th>
+          <td>{{book.name}}</td>
+          <td>{{book.description | truncatechars:55}}</td>
+          <td>{{book.category}}</td>
+          <td>{{book.quantity}}</td>
+          <td>
+            {% for author in book.author_set.all %}
+            - {{author}}<br>
+            {% endfor %}
+          </td>
+          <td>
+            <a href="{% url 'library_admin:delete-book' book.id %}" class="btn btn-danger">Delete</a>
+            <a href="{% url 'library_admin:edit-book' book.id %}" class="btn btn-info">Edit</a>
+            <a href="{% url 'library_admin:detail-book' book.id %}" class="btn btn-secondary">View</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="text-center mb-5"><a href="{% url 'author:author-list' %}" class="btn btn-lg btn-success">Author List</a>
+  </div>
   {% endblock content %}
+
+  {% block pagination %} 
+  {% if is_paginated %}
+  <div class="m-4 paginater-hide">
+    <nav>
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a href="?page={{page_obj.previous_page_number}}" class="page-link">Previous</a></li>
+        {% endif %}
+        <li class="page-item"><a href="#" class="page-link">{{page_obj.number}}</a></li>
+        {% if page_obj.has_next %}
+        <li class="page-item"><a href="?page={{page_obj.next_page_number}}" class="page-link">Next</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+  {% endif %}
+  {% endblock pagination %}
 
 </body>
 

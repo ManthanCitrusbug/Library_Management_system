@@ -61,56 +61,81 @@
   {% block content %}
   <h1 class="text-center mt-4">Issued Books</h1>
   <hr>
-<div class="m-5">
-  <table class="table">
-    <thead class="bg-dark text-white">
-      <th scope="col">Name</th>
-      <th scope="col">Email</th>
-      <th scope="col">Address</th>
-      <th scope="col">Books</th>
-      <th scope="col">Issued Date</th>
-      <th scope="col">Return Date</th>
-      <th scope="col">Charge per Day</th>
-      <th scope="col">Total Charge</th>
-      <th scope="col">Actions</th>
-    </thead>
-    <tbody>
-      {% for book in books %}
-      <tr>
-        <th scope="row">{{book.username}}</th>
-        <td>{{book.email}}</td>
-        <td>{{book.address}}</td>
-        <td>{{book.book}}</td>
-        <td>{{book.issued_date}}</td>
-        {% if book.return_date is not None %}
-        <td>{{book.return_date}}</td>
-        {% else %}
-        <td>-</td>
-        {% endif %}
-        <td>₹{{book.charge_per_day}}</td> 
-        {% if book.total_charge is not None %} 
-        <td>₹{{book.total_charge}}</td>
-        {% else %}
-        <td>-</td>  
-        {% endif %}
-        <td>
-        {% if book.return_date is None %}
+  <form action="" method="POST" class="text-center">
+    {% csrf_token %}
+    <label for="">Search User by Mail ID :</label>
+    <input type="email" name="search" id="search" class="w-15 m-auto" autocomplete="off">
+    <input type="submit" value="Submit" class="btn-success mt-1" id="searchbtn">
+  </form>
+  <hr>
+  <div class="m-5">
+    <table class="table main">
+      <thead class="bg-dark text-white">
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Address</th>
+        <th scope="col">Books</th>
+        <th scope="col">Issued Date</th>
+        <th scope="col">Return Date</th>
+        <th scope="col">Charge per Day</th>
+        <th scope="col">Total Charge</th>
+        <th scope="col">Actions</th>
+      </thead>
+      <tbody>
+        {% for book in books %}
+        <tr>
+          <th scope="row">{{book.username}}</th>
+          <td>{{book.email}}</td>
+          <td>{{book.address}}</td>
+          <td>{{book.book}}</td>
+          <td>{{book.issued_date}}</td>
+          {% if book.return_date is not None %}
+          <td>{{book.return_date}}</td>
+          {% else %}
+          <td>-</td>
+          {% endif %}
+          <td>₹{{book.charge_per_day}}</td>
+          {% if book.total_charge is not None %}
+          <td>₹{{book.total_charge}}</td>
+          {% else %}
+          <td>-</td>
+          {% endif %}
+          <td>
+            {% if book.return_date is None %}
             <a href="{% url 'library_admin:issued-books-delete' book.id %}" class="btn btn-danger">Delete</a>
             <a href="{% url 'library_admin:issued-books-edit' book.id %}" class="btn btn-info">Edit</a>
             <a href="{% url 'library_admin:issued-books-details' book.id %}" class="btn btn-secondary">View</a>
-        {% else %}
+            {% else %}
             <!-- <a href="{% url 'library_admin:issued-books-delete' book.id %}" class="btn btn-danger">Delete</a> -->
             <li class="list-group-item list-group-item-dark">Book Recived</li>
-        {% endif %}
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-
-  <div class="text-center"><a href="{% url 'library_admin:admin-dashboard' %}" class="btn btn-lg btn-success">Home Page</a></div>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="text-center"><a href="{% url 'library_admin:admin-dashboard' %}" class="btn btn-lg btn-success">Home
+      Page</a></div>
   {% endblock content %}
+
+  {% block pagination %}
+  {% if is_paginated %}
+  <div class="m-4 paginater-hide">
+    <nav>
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a href="?page={{page_obj.previous_page_number}}" class="page-link">Previous</a></li>
+        {% endif %}
+        <li class="page-item"><a href="#" class="page-link">{{page_obj.number}}</a></li>
+        {% if page_obj.has_next %}
+        <li class="page-item"><a href="?page={{page_obj.next_page_number}}" class="page-link">Next</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+  {% endif %}
+  {% endblock pagination %}
 
 </body>
 

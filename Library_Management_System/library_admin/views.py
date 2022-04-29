@@ -1,17 +1,14 @@
-from multiprocessing import context
-from pyexpat import model
-from re import template
+from .serializers import BookSerializer, Issued_bookSerialize
+from rest_framework import serializers
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from author.models import Author
-from library_admin.forms import AddBookForm, AdminLoginForm, AdminRegisterform, Issue_Book_Form, Issue_Book_Edit_Form
+from django.http import JsonResponse
+from library_admin.forms import AddBookForm, AdminLoginForm, AdminRegisterform, Issue_Book_Form, Issue_Book_Edit_Form, EditBookForm
 from django.contrib.auth.models import User
 from django.views.generic import CreateView, TemplateView, ListView, UpdateView, DetailView, DeleteView
 from django.contrib.auth import authenticate, login, logout
-from library_admin.models import Book, Category, Issued_Book
-
-from library_admin.models import Book
+from library_admin.models import Book, Issued_Book
 
 # Create your views here.
 
@@ -32,7 +29,6 @@ class AdminLoginView(View):
         user_name = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=user_name,password=password)
-        print(user)
         if user is not None: 
             login(request, user)
             return redirect('library_admin:admin-dashboard')
@@ -45,14 +41,17 @@ class AdminLoginView(View):
 
 
 class AdminDashboardView(ListView):
+    paginate_by = 7
     model = Book
+    context_object_name = 'books'
     template_name = 'admin_dashboard.html'
-    context = {}
+    queryset = Book.objects.filter(deleted=False).order_by('id')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['books'] = Book.objects.filter(deleted=False).order_by('id')
-        return context
+
+class AdminLogoutView(View):
+    def get(self,request):
+        logout(request)
+        return redirect('library_admin:index')
 
 
 class AddBookView(CreateView):
@@ -62,15 +61,9 @@ class AddBookView(CreateView):
     success_url = 'admin-dashboard'
 
 
-class AdminLogoutView(View):
-    def get(self,request):
-        logout(request)
-        return redirect('library_admin:index')
-
-
 class EditBookView(UpdateView):
     model = Book
-    form_class = AddBookForm
+    form_class = EditBookForm
     template_name = 'book/add_book.html'
     success_url = reverse_lazy('library_admin:admin-dashboard')
 
@@ -85,7 +78,7 @@ class DeleteBookView(View):
         book = Book.objects.get(id=pk)
         if book.deleted == False:
             return render(request, 'book/delete_book.html')
-        return redirect('admin-dashboard')
+        return redirect('library_admin:admin-dashboard')
 
     def post(self, request, pk):
         book = Book.objects.get(id=pk)
@@ -102,14 +95,19 @@ class IssueBookView(CreateView):
 
 
 class IssuedBooksListView(ListView):
+    paginate_by = 7
     model = Issued_Book
+    context_object_name = 'books'
     template_name = 'book/issued_book_list.html'
-    context = {}
+    queryset = Issued_Book.objects.all().order_by('id')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['books'] = Issued_Book.objects.all().order_by('id')
-        return context
+    def post(self, request):
+        search_data = request.GET.get('search')
+        print(search_data)
+        books = Issued_Book.objects.filter(email=search_data)
+        serialize = Issued_bookSerialize(books, many=True)
+        print(serialize)
+        return JsonResponse(serialize.data, safe=False)
 
 
 class IssuedBookDetailsView(DetailView):
@@ -122,6 +120,7 @@ class IssuedBookEditView(UpdateView):
     form_class = Issue_Book_Edit_Form
     template_name = 'book/edit_issued_book.html'
     success_url = reverse_lazy('library_admin:issued-books-list')
+
 
 class IssuedBookDeleteView(DeleteView):
     model = Issued_Book
