@@ -351,3 +351,10 @@ function issue_book(){
         return false;
     }
 }
+
+
+
+function search_data(){
+    const search = document.getElementById('search').value;
+    console.log(search);
+}

@@ -1,6 +1,5 @@
-from datetime import date, datetime
+from datetime import date
 from asyncio.windows_events import NULL
-from xml.dom import ValidationErr
 from django import forms
 from django.contrib.auth.models import User
 from author.models import Author
@@ -151,7 +150,7 @@ class Issue_Book_Form(forms.ModelForm):
             if book_instance.quantity == 0:
                 raise forms.ValidationError("Book is not available.")
         return super().clean()
-
+    
     def save(self, commit=True):
         user = super().save(commit=False)
         qun = Book.objects.get(name=user.book)
@@ -200,7 +199,6 @@ class Issue_Book_Edit_Form(forms.ModelForm):
         days = NULL
         if re_book != None:
             days = re_book - date
-            print(days)
             if days.days < 0:
                 raise forms.ValidationError("Enter valid return date.")
         return super().clean()

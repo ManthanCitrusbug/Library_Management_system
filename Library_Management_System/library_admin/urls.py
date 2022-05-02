@@ -1,8 +1,17 @@
+import imp
 from django.contrib import admin
 from django.urls import path
 from . import views
+from rest_framework.routers import DefaultRouter
+
+# router = DefaultRouter()
+
+# router.register('book-api', APIviews.BookListAPIView, basename='book-api')
+# router.register('issued-book-api', APIviews.IssuedBookAPIView, basename='issued-book-api')
 
 app_name = 'library_admin'
+
+
 
 urlpatterns = [
     # path('admin/', admin.site.urls),

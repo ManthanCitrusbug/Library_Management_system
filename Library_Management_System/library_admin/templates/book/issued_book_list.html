@@ -61,10 +61,10 @@
   {% block content %}
   <h1 class="text-center mt-4">Issued Books</h1>
   <hr>
-  <form action="" method="POST" class="text-center">
-    {% csrf_token %}
+  <form action="" method="GET" class="text-center" onsubmit="return search_data()">
+    <!-- {% csrf_token %} -->
     <label for="">Search User by Mail ID :</label>
-    <input type="email" name="search" id="search" class="w-15 m-auto" autocomplete="off">
+    <input type="email" id="search" class="w-15 m-auto" autocomplete="off">
     <input type="submit" value="Submit" class="btn-success mt-1" id="searchbtn">
   </form>
   <hr>

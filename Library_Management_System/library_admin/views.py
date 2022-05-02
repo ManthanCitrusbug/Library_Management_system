@@ -101,14 +101,6 @@ class IssuedBooksListView(ListView):
     template_name = 'book/issued_book_list.html'
     queryset = Issued_Book.objects.all().order_by('id')
 
-    def post(self, request):
-        search_data = request.GET.get('search')
-        print(search_data)
-        books = Issued_Book.objects.filter(email=search_data)
-        serialize = Issued_bookSerialize(books, many=True)
-        print(serialize)
-        return JsonResponse(serialize.data, safe=False)
-
 
 class IssuedBookDetailsView(DetailView):
     model = Issued_Book
